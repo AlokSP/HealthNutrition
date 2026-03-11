@@ -6873,10 +6873,12 @@ public class HomeController {
                         Path rootPath = Paths.get(CommonData.uploadProjectReport, String.valueOf(prId), state_dir,
                                 district_dir);
 
-                        String pdfFolder = Paths.get(rootPath.toString(), "pdf").toString();
-                        String docFolder = Paths.get(rootPath.toString(), "docx_or_odt").toString();
-                        String excelFolder = Paths.get(rootPath.toString(), "excel_or_csv").toString();
-                        String imageFolder = Paths.get(rootPath.toString(), "image").toString();
+                        String token = generateUniqueTokenForProjectReport();
+
+                        String pdfFolder = Paths.get(rootPath.toString(), "pdf", token).toString();
+                        String docFolder = Paths.get(rootPath.toString(), "docx_or_odt", token).toString();
+                        String excelFolder = Paths.get(rootPath.toString(), "excel_or_csv", token).toString();
+                        String imageFolder = Paths.get(rootPath.toString(), "image", token).toString();
 
                         Set<String> extentions = new HashSet<>();
                         String document = "";
@@ -6902,6 +6904,7 @@ public class HomeController {
                             }
                             document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
                             pr.setPdfPath(document);
+                            pr.setPdfToken(token);
                         }
 
                         else if (fileExtention.equals(CommonData.DOC_EXTENSION)) {
@@ -6914,6 +6917,7 @@ public class HomeController {
                             }
                             document = ServiceUtility.uploadMediaFile(file, env, docFolder);
                             pr.setDocPath(document);
+                            pr.setDocToken(token);
                         }
 
                         else if (fileExtention.equals(CommonData.EXCEL_EXTENSION)) {
@@ -6926,6 +6930,7 @@ public class HomeController {
                             }
                             document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
                             pr.setExcelPath(document);
+                            pr.setExcelToken(token);
                         }
 
                         else if (fileExtention.equals(CommonData.IMAGE_EXTENSION)) {
@@ -6938,6 +6943,7 @@ public class HomeController {
                             }
                             document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
                             pr.setImgPath(document);
+                            pr.setImgToken(token);
                         }
 
                         if (fileExtention.equals(CommonData.ZIP_EXTENSION)) {
@@ -6955,6 +6961,7 @@ public class HomeController {
                                         }
                                         document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
                                         pr.setPdfPath(document);
+                                        pr.setPdfToken(token);
                                     }
 
                                     else if (ext.equals(CommonData.DOC_EXTENSION)) {
@@ -6967,6 +6974,7 @@ public class HomeController {
                                         }
                                         document = ServiceUtility.uploadMediaFile(file, env, docFolder);
                                         pr.setDocPath(document);
+                                        pr.setDocToken(token);
                                     }
 
                                     else if (ext.equals(CommonData.EXCEL_EXTENSION)) {
@@ -6979,6 +6987,7 @@ public class HomeController {
                                         }
                                         document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
                                         pr.setExcelPath(document);
+                                        pr.setExcelToken(token);
                                     }
 
                                     else if (ext.equals(CommonData.IMAGE_EXTENSION)) {
@@ -6991,6 +7000,7 @@ public class HomeController {
                                         }
                                         document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
                                         pr.setImgPath(document);
+                                        pr.setImgToken(token);
                                     }
 
                                     else if (ext.equals(CommonData.UNSUPPORTED_EXTENSION)) {
