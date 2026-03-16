@@ -7084,7 +7084,16 @@ public class HomeController {
         }
         State state = pr.getStateDistrictMapping().getState();
         District district = pr.getStateDistrictMapping().getDistrict();
-        List<State> states = stateService.findAll();
+
+        List<District> districts = districtService.findAllByState(state);
+
+        districtService.findByDistrictNameIgnoreCase(CommonData.ALL_DISTRICTS).ifPresent(districts::add);
+
+        districts = districts.stream().distinct()
+                .sorted(Comparator.comparing(District::getDistrictName, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
+
+        model.addAttribute("districts", districts);
 
         List<ProjectReport> projectReportList = new ArrayList<>();
         List<ProjectReport> tempProjectReportList = projectReportService.findAll();
@@ -7093,7 +7102,7 @@ public class HomeController {
                 projectReportList.add(temp);
             }
         }
-        model.addAttribute("states", states);
+
         model.addAttribute("projectReportList", projectReportList);
         model.addAttribute("ProjectReport", pr);
         model.addAttribute("state", state);
