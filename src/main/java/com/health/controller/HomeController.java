@@ -921,6 +921,31 @@ public class HomeController {
         getModelTrainingResource(model, 0, 0, 0);
     }
 
+    private void getModelProjectReport(Model model, int stateId, int districtId, int fileTypeId) {
+
+        ArrayList<Map<String, Integer>> arlist = ajaxController.getDistrictAndFileTypeByState(stateId, districtId,
+                fileTypeId);
+        ArrayList<Map<String, Integer>> arlist1 = ajaxController.getStateAndFileTypeByDistrict(stateId, districtId,
+                fileTypeId);
+        Map<String, Integer> states = arlist1.get(0);
+        Map<String, Integer> fileType = arlist1.get(1);
+        Map<String, Integer> districts = arlist.get(0);
+
+        model.addAttribute("states", states);
+        model.addAttribute("districts", districts);
+        model.addAttribute("fileTypes", fileType);
+
+        model.addAttribute("localState", stateId);
+        model.addAttribute("localDistrict", districtId);
+        model.addAttribute("localFile", fileTypeId);
+        model.addAttribute("districtCount", districts.size());
+
+    }
+
+    private void getModelProjectReport(Model model) {
+        getModelProjectReport(model, 0, 0, 0);
+    }
+
     @RequestMapping("/")
     public String index(Model model) {
 
@@ -7660,7 +7685,7 @@ public class HomeController {
         State state = stateId != 0 ? stateService.findById(stateId) : null;
         District district = districtId != 0 ? districtService.findById(districtId) : null;
         if (state == null || district == null || inputFileType == 0) {
-            // getModelTrainingResource(model);
+            getModelProjectReport(model);
 
             model.addAttribute("error_msg", "Please select all fields");
             return "projectReports";
@@ -7680,7 +7705,7 @@ public class HomeController {
         StateDistrictMapping sdm = stateDistrictMappingService.findByStateAndDistrict(state, district);
         List<ProjectReport> prList = projectReportService.findByStateDistrictMapping(sdm);
         if (prList.isEmpty() || prList.size() > 1) {
-            // getModelTrainingResource(model);
+            getModelProjectReport(model);
             model.addAttribute("error_msg", "Invalid Data");
             return "projectReports";
         }
@@ -7702,7 +7727,7 @@ public class HomeController {
 
         String filePath = ServiceUtility.getProjectReportFilePath(pr, inputFileType);
         if (filePath.isEmpty()) {
-            // getModelTrainingResource(model);
+            getModelProjectReport(model);
             model.addAttribute("error_msg", "No File Found");
             return "projectReports";
         }
@@ -7795,7 +7820,7 @@ public class HomeController {
 
             if (allowed) {
                 model.addAttribute("pageIndexes", pageIndexes);
-                // model.addAttribute("filePaths", filePaths);
+
                 model.addAttribute("fileNames", fileNames);
             }
 
@@ -7814,7 +7839,7 @@ public class HomeController {
         District localDistrict = null;
         String localFile = null;
 
-        // getModelTrainingResource(model, topicId, lanId, inputFileType);
+        getModelProjectReport(model, stateId, districtId, inputFileType);
 
         if (stateId != 0) {
             localState = stateService.findById(stateId);
@@ -7829,7 +7854,7 @@ public class HomeController {
             model.addAttribute("fileTypeQuery", localFile);
         }
 
-        return "trainingResources";
+        return "projectReports";
     }
 
     /************************ Project Report End ********************************/
