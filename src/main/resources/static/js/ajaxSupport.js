@@ -3529,13 +3529,13 @@ $('.enableProjetcReport').click(function() {
     
      */
 
-	function loadDistrictAndFileTypeByState(stateId, districId, fileTypeId) {
+	function loadDistrictAndFileTypeByState(stateId, districtId, fileTypeId) {
 				$.ajax({
 					type : "GET",
 					url : projectPath+"loadDistrictAndFileTypeByState",
 					data : {
 						"stateId" : stateId,
-						"districId":districId,
+						"districtId":districtId,
 						"fileTypeId":fileTypeId
 					},
 					contentType : "application/json",
@@ -3544,15 +3544,15 @@ $('.enableProjetcReport').click(function() {
 						
 						console.log(result);
 			            var html = '';
-			            html += '<option value="0">Select Distric</option>';
+			            html += '<option value="0">Select District</option>';
 			           
 			                $.each(result, function (value, key) {
-			                    var selected = (districId == key) ? "selected" : "";
+			                    var selected = (districtId == key) ? "selected" : "";
 			                    html += `<option value="${key}" ${selected}>${value}</option>`;
 			                });
 			            
-			            $("#districNamePR").prop('disabled', false);
-			            $('#districNamePR').html(html);
+			            $("#districtNamePR").prop('disabled', false);
+			            $('#districtNamePR').html(html);
 						
 						result= resultarlist[1];
 						
@@ -3582,9 +3582,9 @@ $('.enableProjetcReport').click(function() {
     $( "#stateNamePR" ).change(function() {
 			
 				var stateId = $(this).val();
-				var districId = $("#districtNamePR").val();
+				var districtId = $("#districtNamePR").val();
 				var fileTypeId=$("#inputFileTypePR").val();
-				loadDistrictAndFileTypeByState(stateId, districId, fileTypeId);
+				loadDistrictAndFileTypeByState(stateId, districtId, fileTypeId);
 				
 			});
 			
@@ -3593,10 +3593,10 @@ $('.enableProjetcReport').click(function() {
 				var stateId = 0;
 				
 				$("#stateNamePR").val("0");
-				var districId = $("#districtNamePR").val();
+				var districtId = $("#districtNamePR").val();
 				var fileTypeId=$("#inputFileTypePR").val();
 				
-				loadDistrictAndFileTypeByState(stateId, districId, fileTypeId);
+				loadDistrictAndFileTypeByState(stateId, districtId, fileTypeId);
 				return false;
 				
 			});
@@ -3773,7 +3773,7 @@ $('.enableProjetcReport').click(function() {
 				
 				
 				loadStateAndDistrictByFileType(stateId, districtId, fileTypeId);
-				loadDistrictAndFileTypeByState(stateId, districId, fileTypeId);
+				loadDistrictAndFileTypeByState(stateId, districtId, fileTypeId);
 				loadStateAndFileTypeByDistrict(stateId, districtId, fileTypeId);
 				
 				return false;
