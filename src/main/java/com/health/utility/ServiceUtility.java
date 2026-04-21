@@ -240,6 +240,22 @@ public class ServiceUtility {
         return path;
     }
 
+    private static String uploadLargeFile(MultipartFile uploadFile, String pathToUpload) throws Exception {
+
+        String fileName = uploadFile.getOriginalFilename();
+        Path filePath = Paths.get(pathToUpload, fileName);
+
+        Files.createDirectories(filePath.getParent());
+
+        try (InputStream inputStream = uploadFile.getInputStream()) {
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        logger.info("File Name Path: {}", filePath.toString());
+
+        return filePath.toString();
+    }
+
     public static int extractInteger(String str) {
 
         String numberStr = str.replaceAll("\\D+", ""); // \\D+ matches all non-digit characters
@@ -262,6 +278,21 @@ public class ServiceUtility {
         MultipartFile renamedFile = new RenamedMultipartFile(file, newFileName);
         createFolder(env.getProperty("spring.applicationexternalPath.name") + folder);
         String pathtoUploadPoster = ServiceUtility.uploadFile(renamedFile,
+                env.getProperty("spring.applicationexternalPath.name") + folder);
+        int indexToStart = pathtoUploadPoster.indexOf("Media");
+
+        String document = pathtoUploadPoster.substring(indexToStart, pathtoUploadPoster.length());
+        return document;
+
+    }
+
+    public static String uploadLargeMediaFile(MultipartFile file, Environment env, String folder) throws Exception {
+
+        String fileName = file.getOriginalFilename();
+        String newFileName = sanitizeFilename(fileName);
+        MultipartFile renamedFile = new RenamedMultipartFile(file, newFileName);
+        createFolder(env.getProperty("spring.applicationexternalPath.name") + folder);
+        String pathtoUploadPoster = ServiceUtility.uploadLargeFile(renamedFile,
                 env.getProperty("spring.applicationexternalPath.name") + folder);
         int indexToStart = pathtoUploadPoster.indexOf("Media");
 
