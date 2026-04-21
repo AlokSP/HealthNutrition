@@ -6933,7 +6933,7 @@ public class HomeController {
                                     continue;
                                 }
                             }
-                            document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
+                            document = ServiceUtility.uploadLargeMediaFile(file, env, pdfFolder);
                             pr.setPdfPath(document);
                             pr.setPdfToken(token);
                         }
@@ -6946,7 +6946,7 @@ public class HomeController {
                                     continue;
                                 }
                             }
-                            document = ServiceUtility.uploadMediaFile(file, env, docFolder);
+                            document = ServiceUtility.uploadLargeMediaFile(file, env, docFolder);
                             pr.setDocPath(document);
                             pr.setDocToken(token);
                         }
@@ -6959,7 +6959,7 @@ public class HomeController {
                                     continue;
                                 }
                             }
-                            document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
+                            document = ServiceUtility.uploadLargeMediaFile(file, env, excelFolder);
                             pr.setExcelPath(document);
                             pr.setExcelToken(token);
                         }
@@ -6972,7 +6972,7 @@ public class HomeController {
                                     continue;
                                 }
                             }
-                            document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
+                            document = ServiceUtility.uploadLargeMediaFile(file, env, imageFolder);
                             pr.setImgPath(document);
                             pr.setImgToken(token);
                         }
@@ -6990,7 +6990,7 @@ public class HomeController {
                                                 continue;
                                             }
                                         }
-                                        document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
+                                        document = ServiceUtility.uploadLargeMediaFile(file, env, pdfFolder);
                                         pr.setPdfPath(document);
                                         pr.setPdfToken(token);
                                     }
@@ -7003,7 +7003,7 @@ public class HomeController {
                                                 continue;
                                             }
                                         }
-                                        document = ServiceUtility.uploadMediaFile(file, env, docFolder);
+                                        document = ServiceUtility.uploadLargeMediaFile(file, env, docFolder);
                                         pr.setDocPath(document);
                                         pr.setDocToken(token);
                                     }
@@ -7016,7 +7016,7 @@ public class HomeController {
                                                 continue;
                                             }
                                         }
-                                        document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
+                                        document = ServiceUtility.uploadLargeMediaFile(file, env, excelFolder);
                                         pr.setExcelPath(document);
                                         pr.setExcelToken(token);
                                     }
@@ -7029,7 +7029,7 @@ public class HomeController {
                                                 continue;
                                             }
                                         }
-                                        document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
+                                        document = ServiceUtility.uploadLargeMediaFile(file, env, imageFolder);
                                         pr.setImgPath(document);
                                         pr.setImgToken(token);
                                     }
@@ -7329,7 +7329,7 @@ public class HomeController {
 
                 else if (fileExtention.equals(CommonData.PDF_EXTENSION)
                         && originalFileType.equals(CommonData.PDF_OR_ZIP_OF_PDFS)) {
-                    document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
+                    document = ServiceUtility.uploadLargeMediaFile(file, env, pdfFolder);
                     newProjectReport.setPdfPath(document);
                     newProjectReport.setPdfToken(token);
                     if (newProjectData)
@@ -7339,7 +7339,7 @@ public class HomeController {
 
                 else if (fileExtention.equals(CommonData.DOC_EXTENSION)
                         && originalFileType.equals(CommonData.Doc_OR_ZIP_OF_DOCS)) {
-                    document = ServiceUtility.uploadMediaFile(file, env, docFolder);
+                    document = ServiceUtility.uploadLargeMediaFile(file, env, docFolder);
                     newProjectReport.setDocPath(document);
                     newProjectReport.setDocToken(token);
                     if (newProjectData)
@@ -7349,7 +7349,7 @@ public class HomeController {
 
                 else if (fileExtention.equals(CommonData.EXCEL_EXTENSION)
                         && originalFileType.equals(CommonData.Excel_OR_ZIP_OF_EXCELS)) {
-                    document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
+                    document = ServiceUtility.uploadLargeMediaFile(file, env, excelFolder);
                     newProjectReport.setExcelPath(document);
                     newProjectReport.setExcelToken(token);
                     if (newProjectData)
@@ -7359,7 +7359,7 @@ public class HomeController {
 
                 else if (fileExtention.equals(CommonData.IMAGE_EXTENSION)
                         && originalFileType.equals(CommonData.image_OR_ZIP_OF_IMAGES)) {
-                    document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
+                    document = ServiceUtility.uploadLargeMediaFile(file, env, imageFolder);
                     newProjectReport.setImgPath(document);
                     newProjectReport.setImgToken(token);
                     if (newProjectData)
@@ -7374,7 +7374,7 @@ public class HomeController {
                         for (String ext : extentions) {
                             if (ext.equals(CommonData.PDF_EXTENSION)
                                     && originalFileType.equals(CommonData.PDF_OR_ZIP_OF_PDFS)) {
-                                document = ServiceUtility.uploadMediaFile(file, env, pdfFolder);
+                                document = ServiceUtility.uploadLargeMediaFile(file, env, pdfFolder);
                                 newProjectReport.setPdfPath(document);
                                 newProjectReport.setPdfToken(token);
                                 if (newProjectData) {
@@ -7387,7 +7387,7 @@ public class HomeController {
 
                             else if (ext.equals(CommonData.DOC_EXTENSION)
                                     && originalFileType.equals(CommonData.Doc_OR_ZIP_OF_DOCS)) {
-                                document = ServiceUtility.uploadMediaFile(file, env, docFolder);
+                                document = ServiceUtility.uploadLargeMediaFile(file, env, docFolder);
                                 newProjectReport.setDocPath(document);
                                 newProjectReport.setDocToken(token);
                                 if (newProjectData) {
@@ -7399,7 +7399,7 @@ public class HomeController {
 
                             else if (ext.equals(CommonData.EXCEL_EXTENSION)
                                     && originalFileType.equals(CommonData.Excel_OR_ZIP_OF_EXCELS)) {
-                                document = ServiceUtility.uploadMediaFile(file, env, excelFolder);
+                                document = ServiceUtility.uploadLargeMediaFile(file, env, excelFolder);
                                 newProjectReport.setExcelPath(document);
                                 newProjectReport.setExcelToken(token);
                                 if (newProjectData) {
@@ -7411,7 +7411,7 @@ public class HomeController {
 
                             else if (ext.equals(CommonData.IMAGE_EXTENSION)
                                     && originalFileType.equals(CommonData.image_OR_ZIP_OF_IMAGES)) {
-                                document = ServiceUtility.uploadMediaFile(file, env, imageFolder);
+                                document = ServiceUtility.uploadLargeMediaFile(file, env, imageFolder);
                                 newProjectReport.setImgPath(document);
                                 newProjectReport.setImgToken(token);
                                 if (newProjectData) {
