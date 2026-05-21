@@ -14,7 +14,7 @@ public interface promoVideoRepository extends CrudRepository<PromoVideo, Integer
      * 
      * @return primitive integer value
      */
-    @Query("select max(promoId) from PromoVideo")
+    @Query("select coalesce(max(promoId),0) from PromoVideo")
     int getNewId();
 
     @Override

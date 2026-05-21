@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.health.utility.ServiceUtility;
+
 @Entity
 public class PathofPromoVideo {
 
@@ -19,6 +21,9 @@ public class PathofPromoVideo {
 
     @Column(name = "video_path")
     private String videoPath;
+
+    @Column(name = "thumbnail_path")
+    private String thumbnailPath;
 
     @ManyToOne
     @JoinColumn(name = "promo_id")
@@ -50,11 +55,32 @@ public class PathofPromoVideo {
         this.lan = lan;
     }
 
-    public int getBroFileId() {
+    public PathofPromoVideo(int pathPromoId, Timestamp dateAdded, String videoPath, String thumbnailPath,
+            PromoVideo promoVideo, Language lan) {
+        super();
+        this.pathPromoId = pathPromoId;
+        this.dateAdded = dateAdded;
+        this.videoPath = videoPath;
+        this.thumbnailPath = thumbnailPath;
+        this.promoVideo = promoVideo;
+        this.lan = lan;
+    }
+
+    public PathofPromoVideo(Timestamp dateAdded, String videoPath, String thumbnailPath, PromoVideo promoVideo,
+            Language lan) {
+        super();
+        this.dateAdded = dateAdded;
+        this.videoPath = videoPath;
+        this.thumbnailPath = thumbnailPath;
+        this.promoVideo = promoVideo;
+        this.lan = lan;
+    }
+
+    public int getPathPromoId() {
         return pathPromoId;
     }
 
-    public void setBroFileId(int pathPromoId) {
+    public void setPathPromoId(int pathPromoId) {
         this.pathPromoId = pathPromoId;
     }
 
@@ -80,6 +106,15 @@ public class PathofPromoVideo {
 
     public void setPromoVideo(PromoVideo promoVideo) {
         this.promoVideo = promoVideo;
+    }
+
+    public String getThumbnailPath() {
+        return ServiceUtility.convertFilePathToUrl(thumbnailPath);
+
+    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
     public Language getLan() {

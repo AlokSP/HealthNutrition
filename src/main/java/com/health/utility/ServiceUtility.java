@@ -677,6 +677,15 @@ public class ServiceUtility {
         return true;
     }
 
+    public static boolean checkThumbnailsizeofPromoVideo(MultipartFile temp) {
+        logger.info("Thumbnail Size: {}", temp.getSize());
+        if (temp.getSize() > CommonData.thumbnailSizeofPromoVideo) {
+
+            return false;
+        }
+        return true;
+    }
+
     /**
      * to check whether size of file is within the limit
      * 

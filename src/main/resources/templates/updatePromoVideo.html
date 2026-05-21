@@ -39,7 +39,7 @@
 							</div>
 							<div class="card-body">
 								<div class="row">
-									<div class="col-lg-6">
+									<div class="col-lg-12">
 										<form class="form-horizontal" th:action="@{/updatePromoVideo}"
 											method="post" enctype="multipart/form-data">
 											
@@ -71,21 +71,37 @@
 
 		
 								<div th:each="lanouter,iter: ${languages}" th:id="${'fileInputDiv' + iter.index}" th:style="${'display: ' + (iter.first ? 'block' : 'none')}" >
-									<div class="form-group" style="float:left; width:40%; ">
+									
+									<div class="container">
+									 <div class="row">	
+									 <div class="col-md-4">	 
+									<div class="form-group" >
                	                 		<label th:for="${'languageNameId' + iter.index}">Select Language </label>
 										<select th:id="${'languageNameId' + iter.index}" class="form-control" name="languageName">
 	  										<option value="0">Select ...</option>
 	  										<option th:each="lan : ${languages}" th:value="${lan.getLanId()}" th:text="${lan.getLangName()}"></option>
 										</select>
   									</div>
-
-<div class="form-group" style="float:left;  width:40%; margin-left:15px; margin-right:40px;">
+									 </div>
+<div class="col-md-3">
+<div class="form-group">
 	<label th:for="${'promoVideo' + iter.index}">PromoVideo*  </label>
 	<input type="file" class="form-control" th:id="${'promoVideo' + iter.index}" name="promoVideo"  accept=".mp4"/>
 	<small> (Only mp4 format of max filesize 1GB)</small> 
 	
 </div>
+</div>
+ <div class="col-md-3">
+<div class="form-group">
+	<label th:for="${'thumbnailEdit' + iter.index}">Thumbail  </label>
+	<input type="file" class="form-control" th:id="${'thumbnailEdit' + iter.index}" name="thumbnailEdit"   accept=".jpg,.jpeg,.png"/>
+	<small> (Only JPG, JPEG, or PNG  format of max filesize 2 MB)</small> 
+	
+</div>
+</div>
 
+</div>
+</div>
 </div>
 									
 									<br>

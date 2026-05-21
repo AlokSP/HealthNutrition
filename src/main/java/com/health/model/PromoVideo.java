@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+import com.health.utility.ServiceUtility;
+
 @Entity
 public class PromoVideo {
 
@@ -148,6 +150,17 @@ public class PromoVideo {
         return videoPath;
     }
 
+    public String GetThumbnailofFirstLan() {
+        if (pathofPromoVideo.size() == 0)
+            return "";
+        PathofPromoVideo first = pathofPromoVideo.iterator().next();
+        String thumbnailPath = first.getThumbnailPath();
+        if (thumbnailPath == null)
+            return "";
+        String result = ServiceUtility.convertFilePathToUrl(thumbnailPath);
+        return result;
+    }
+
     public String GetLangNameofFirstVideoFile() {
         if (pathofPromoVideo.size() == 0)
             return "";
@@ -163,6 +176,16 @@ public class PromoVideo {
         }
         return videoFiles;
 
+    }
+
+    public HashMap<Integer, PathofPromoVideo> getVideoFileThumbnailAccordingToLanId() {
+        HashMap<Integer, PathofPromoVideo> videoFilesAndThumbnails = new HashMap<>();
+
+        for (PathofPromoVideo temp : pathofPromoVideo) {
+            videoFilesAndThumbnails.put(temp.getLan().getLanId(), temp);
+        }
+
+        return videoFilesAndThumbnails;
     }
 
     @Override

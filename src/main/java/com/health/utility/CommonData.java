@@ -236,6 +236,8 @@ public class CommonData {
 
     public static final long videoSizePromoVideo = 1000 * 1024 * 1024;
 
+    public static final long thumbnailSizeofPromoVideo = 2 * 1024 * 1024;
+
     public static final long videoSizeSpokenVideo = 1000 * 1024 * 1024;
 
     public static final long fileSize = 10 * 1024 * 1024;
