@@ -1037,6 +1037,17 @@ public class HomeController {
             model.addAttribute("listofPromoVideos", promoVideoHome);
             model.addAttribute("PromoVideoLanguages", promoVideoHome.get(0).findAlllanguages());
             model.addAttribute("PromoVideos", promoVideoHome.get(0).getVideoFiles());
+            List<PathofPromoVideo> pathofPromoVideos = new ArrayList<>(promoVideoHome.get(0).getPathofPromoVideo());
+            HashMap<Integer, String> videoPathsbyLanId = new HashMap<>();
+            HashMap<Integer, String> thumbnailPathsbyLanId = new HashMap<>();
+            for (PathofPromoVideo temp : pathofPromoVideos) {
+                int lanId = temp.getLan().getLanId();
+                videoPathsbyLanId.put(lanId, temp.getVideoPath());
+                thumbnailPathsbyLanId.put(lanId, temp.getThumbnailPath());
+            }
+
+            model.addAttribute("videosbylanId", videoPathsbyLanId);
+            model.addAttribute("thumbnailsbylanId", thumbnailPathsbyLanId);
 
         }
 
@@ -2159,7 +2170,20 @@ public class HomeController {
             return "promoVideoView";
         }
 
-        model.addAttribute("PromoVideos", promoVideos.get(0).getVideoFiles());
+        List<PathofPromoVideo> pathofPromoVideos = new ArrayList<>(promoVideos.get(0).getPathofPromoVideo());
+        HashMap<Integer, String> videoPathsbyLanId = new HashMap<>();
+        HashMap<Integer, String> thumbnailPathsbyLanId = new HashMap<>();
+
+        for (PathofPromoVideo temp : pathofPromoVideos) {
+            int lanId = temp.getLan().getLanId();
+            videoPathsbyLanId.put(lanId, temp.getVideoPath());
+            thumbnailPathsbyLanId.put(lanId, temp.getThumbnailPath());
+        }
+
+        model.addAttribute("videosbylanId", videoPathsbyLanId);
+        model.addAttribute("thumbnailsbylanId", thumbnailPathsbyLanId);
+
+        model.addAttribute("pathofPromoVideos", pathofPromoVideos);
 
         if (langName == null) {
             return "redirect:/";
@@ -2183,6 +2207,7 @@ public class HomeController {
         }
 
         String promoVideoFile = "";
+        String thumbnailFile = "";
 
         if (promoVideo == null) {
             foundVideo = false;
@@ -2192,15 +2217,23 @@ public class HomeController {
         }
         int lanId = lan.getLanId();
 
-        HashMap<Integer, String> promoVideoFiles = promoVideo.getVideoFiles();
-        if (promoVideoFiles != null & promoVideoFiles.size() > 0) {
-            promoVideoFile = promoVideoFiles.get(lanId);
+        // HashMap<Integer, String> promoVideoFiles = promoVideo.getVideoFiles();
+        List<PathofPromoVideo> pathofPromoVideos1 = new ArrayList<>(promoVideo.getPathofPromoVideo());
+        if (pathofPromoVideos1 != null & pathofPromoVideos1.size() > 0) {
+            for (PathofPromoVideo temp : pathofPromoVideos1) {
+                if (temp.getLan().getLanId() == lanId) {
+                    promoVideoFile = temp.getVideoPath();
+                    thumbnailFile = temp.getThumbnailPath();
+                    break;
+                }
+            }
 
         } else {
             return "redirect:/";
         }
 
         model.addAttribute("promoVideoFile", promoVideoFile);
+        model.addAttribute("thumbnailFile", thumbnailFile);
         model.addAttribute("promoVideo", promoVideo);
         foundVideo = (promoVideoFile != null);
         model.addAttribute("foundVideo", foundVideo);
@@ -3220,6 +3253,7 @@ public class HomeController {
     @PostMapping("/addPromoVideo")
     public String addPromoVideoPost(HttpServletRequest req, Model model, Principal principal,
             @RequestParam("promoVideo") List<MultipartFile> promoVideos,
+            @RequestParam("thumbnail") List<MultipartFile> thumbnails,
             @RequestParam(name = "languageName") List<Integer> languageIds,
             @RequestParam(name = "title") String title) {
 
@@ -3237,6 +3271,23 @@ public class HomeController {
 
         model.addAttribute("promoVideos", promoVideosList);
         model.addAttribute("pathofPromoVideos", pathofPromoVideos);
+
+        for (MultipartFile tempFile : thumbnails) {
+            if (!tempFile.isEmpty()) {
+
+                if (!ServiceUtility.checkFileExtensionImage(tempFile)) { // throw error on extension
+                    model.addAttribute("error_msg", "Only png, jpg or jpeg file is allowed for thumnail");
+                    return addPromoVideoGet(req, model, principal);
+                }
+
+                if (!ServiceUtility.checkThumbnailsizeofPromoVideo(tempFile)) {
+                    model.addAttribute("error_msg", "File size must be less than 2 MB");
+                    return addPromoVideoGet(req, model, principal);
+                }
+
+            }
+
+        }
 
         for (MultipartFile uniquefile : promoVideos) {
             if (!uniquefile.isEmpty()) {
@@ -3273,11 +3324,14 @@ public class HomeController {
             List<PathofPromoVideo> pathofPromoVideoList = new ArrayList<>();
 
             String document1 = "";
+            String thumnail1 = "";
 
             int newPathOfPromoId = pathofPromoVideoService.getNewId();
             List<String> addedLanguages = new ArrayList<>();
             for (int i = 0; i < languageIds.size(); i++) {
                 document1 = "";
+                thumnail1 = "";
+                boolean isThumnailFileExist = false;
 
                 if (languageIds.get(i) == 0) {
                     break;
@@ -3285,6 +3339,13 @@ public class HomeController {
                 if (!promoVideos.get(i).isEmpty()) {
 
                     String langName = lanService.getById(languageIds.get(i)).getLangName();
+
+                    if (!thumbnails.get(i).isEmpty()) {
+
+                        String folder = CommonData.uploadPromoVideo + newPromoVideoId + "/" + langName;
+                        thumnail1 = ServiceUtility.uploadMediaFile(thumbnails.get(i), env, folder);
+                        isThumnailFileExist = true;
+                    }
 
                     if (!promoVideos.get(i).isEmpty()) {
 
@@ -3301,8 +3362,16 @@ public class HomeController {
 
                     addedLanguages.add(langName);
 
-                    pathofPromoVideoList.add(new PathofPromoVideo(newPathOfPromoId, ServiceUtility.getCurrentTime(),
-                            document1, promoVideoTemp, lanService.getById(languageIds.get(i))));
+                    if (isThumnailFileExist) {
+
+                        pathofPromoVideoList.add(new PathofPromoVideo(newPathOfPromoId, ServiceUtility.getCurrentTime(),
+                                document1, thumnail1, promoVideoTemp, lanService.getById(languageIds.get(i))));
+                    } else {
+
+                        pathofPromoVideoList.add(new PathofPromoVideo(newPathOfPromoId, ServiceUtility.getCurrentTime(),
+                                document1, promoVideoTemp, lanService.getById(languageIds.get(i))));
+                    }
+
                     newPathOfPromoId += 1;
 
                 } else {
@@ -7272,7 +7341,8 @@ public class HomeController {
     @PostMapping("/updatePromoVideo")
     public String updatePromoVideoPost(HttpServletRequest req, Model model, Principal principal,
             @RequestParam(name = "languageName") List<Integer> languageIds,
-            @RequestParam("promoVideo") List<MultipartFile> promoVideoFiles) {
+            @RequestParam("promoVideo") List<MultipartFile> promoVideoFiles,
+            @RequestParam("thumbnailEdit") List<MultipartFile> thumbnails) {
 
         User usr = getUser(principal);
         logger.info("{} {} {}", usr.getUsername(), req.getMethod(), req.getRequestURI());
@@ -7307,6 +7377,23 @@ public class HomeController {
 
         try {
 
+            for (MultipartFile tempfile : thumbnails) {
+                if (!tempfile.isEmpty()) {
+
+                    if (!ServiceUtility.checkFileExtensionImage(tempfile)) { // throw error on extension
+                        model.addAttribute("error_msg", "Only jpg, jpeg or png file is allowed for thumnail");
+                        return "updatePromoVideo";
+                    }
+
+                    if (!ServiceUtility.checkThumbnailsizeofPromoVideo(tempfile)) {
+                        model.addAttribute("error_msg", "File size must be less than 2 MB");
+                        return "updatePromoVideo";
+                    }
+
+                }
+
+            }
+
             for (MultipartFile uniquefile : promoVideoFiles) {
                 if (!uniquefile.isEmpty()) {
 
@@ -7325,11 +7412,13 @@ public class HomeController {
             }
 
             String document1 = "";
+            String thumnail1 = "";
             int newpathofPromoVideoId = pathofPromoVideoService.getNewId();
             List<PathofPromoVideo> pathofPromoVideoList1 = new ArrayList<>();
             List<String> addedlanguages = new ArrayList<>();
             for (int i = 0; i < languageIds.size(); i++) {
                 document1 = "";
+                thumnail1 = "";
 
                 if (languageIds.get(i) == 0) {
                     break;
@@ -7348,6 +7437,13 @@ public class HomeController {
 
                 }
 
+                if (!thumbnails.get(i).isEmpty()) {
+
+                    String folder = CommonData.uploadPromoVideo + promoVideoIdInt + "/" + langName;
+                    thumnail1 = ServiceUtility.uploadMediaFile(thumbnails.get(i), env, folder);
+
+                }
+
                 for (String testlan : addedlanguages) {
                     if (testlan == langName) {
                         duplicatLanguage = true;
@@ -7362,18 +7458,28 @@ public class HomeController {
                         pathofPromoVideo1.setVideoPath(document1);
                     }
 
+                    if (!thumbnails.get(i).isEmpty()) {
+                        pathofPromoVideo1.setThumbnailPath(thumnail1);
+                    }
+
                     pathofPromoVideoService.save(pathofPromoVideo1);
 
                 }
 
                 else {
 
-                    if (!promoVideoFiles.get(i).isEmpty()) {
+                    if (!promoVideoFiles.get(i).isEmpty() && !thumbnails.get(i).isEmpty()) {
+                        pathofPromoVideoList1.add(new PathofPromoVideo(newpathofPromoVideoId,
+                                ServiceUtility.getCurrentTime(), document1, thumnail1, promoVideo, language));
+                        newpathofPromoVideoId++;
+
+                    } else if (!promoVideoFiles.get(i).isEmpty()) {
                         pathofPromoVideoList1.add(new PathofPromoVideo(newpathofPromoVideoId,
                                 ServiceUtility.getCurrentTime(), document1, promoVideo, language));
-                        newpathofPromoVideoId = newpathofPromoVideoId + 1;
+                        newpathofPromoVideoId++;
+                    }
 
-                    } else {
+                    else {
                         fileError = true;
                     }
 

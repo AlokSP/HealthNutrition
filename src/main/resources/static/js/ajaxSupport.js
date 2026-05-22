@@ -1795,8 +1795,9 @@ $(document).ready(function() {
 $("#languageId1").change(function() {
 
 						var lanId = $(this).find(":selected").val();
-						var video = promoVideos[lanId];
-						var outerhtml = '<video id="newvid1" class="vid1" controls="controls" style="width:100%;" >';
+						var video = videosByLanId[lanId];
+						var thumbnail=thumbnailsByLanId[lanId];
+						var outerhtml =  '<video id="newvid1" class="vid1" controls="controls" style="width:100%;" poster="/files/' + thumbnail + '">';
 						outerhtml += '<source src="/files/' + video + '" type="video/mp4" />';
 						outerhtml += 'Your browser does not support HTML video.'
 						outerhtml += '</video>';
@@ -1850,8 +1851,9 @@ $("#languageId1").change(function() {
 $("#languageIdViewPage").change(function() {
 
 						var lanId = $(this).find(":selected").val();
-						var video = promoVideos[lanId];
-						var outerhtml = '<video id="newvid1" class="vid1" controls="controls" style="width:100%;" >';
+						var video = videosByLanId[lanId];
+						var thumbnail=thumbnailsByLanId[lanId];
+						var outerhtml =  '<video id="newvid1" class="vid1" controls="controls" style="width:100%;" poster="/files/' + thumbnail + '">';
 						outerhtml += '<source src="/files/' + video + '" type="video/mp4" />';
 						outerhtml += 'Your browser does not support HTML video.'
 						outerhtml += '</video>';

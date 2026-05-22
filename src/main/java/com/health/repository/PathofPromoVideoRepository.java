@@ -11,7 +11,7 @@ import com.health.model.PromoVideo;
 
 public interface PathofPromoVideoRepository extends CrudRepository<PathofPromoVideo, Integer> {
 
-    @Query("select max(pathPromoId) from PathofPromoVideo")
+    @Query("select coalesce(max(pathPromoId),0) from PathofPromoVideo")
     int getNewId();
 
     PathofPromoVideo findByLan(Language lan);

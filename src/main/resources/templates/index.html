@@ -473,7 +473,7 @@ the globe.
     <div class="card is-shady pt-3" style="width: 100%;" >
             <div class="card-image text-center" style="margin-left:15px; margin-right:15px;">
             <div  id="promoVideoSourceOuter" style="width:100%;">
-            <video class="vid1" th:if="${pro.GetVideoFileofFirstLan()!= 'null'}" controls="controls" style="width:100%;" >
+            <video class="vid1" th:if="${pro.GetVideoFileofFirstLan()!= 'null'}" controls="controls" style="width:100%;" th:poster="@{/files/}+@{${pro.GetThumbnailofFirstLan()}}" >
 			  <source th:src="@{/files/}+@{${pro.GetVideoFileofFirstLan()}}" type="video/mp4" />
  				Your browser does not support HTML video.
 			</video>
@@ -486,8 +486,10 @@ the globe.
                 <span th:text="${pro.findAlllangNames()}"></span>
               </div>
               <script th:inline="javascript">
-              var promoVideos = /*[[${PromoVideos}]]*/ null;
-      
+              //var promoVideos = /*[[${PromoVideos}]]*/ null;
+      		  var videosByLanId = /*[[${videosbylanId}]]*/ null;
+              var thumbnailsByLanId = /*[[${thumbnailsbylanId}]]*/ null;
+              
               </script>
                           
                 

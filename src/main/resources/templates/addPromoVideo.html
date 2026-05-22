@@ -11,8 +11,18 @@ font-size:0.9rem;
 color: #044F7A!important;
 font-weight:bold!important;
 }
+
+ :root {
+  --plyr-color-main: #ff9033;
+   
+}
+  .plyr__controls__item plyr__volume{
+    margin-bottom: 25px;
+    padding-bottom:25px;
+  }
 </style>
 <body>
+	<script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>
 	<div th:replace="common/sidebar :: top_header"></div>
 	<div class="container-fluid">
 		<div class="row">
@@ -55,7 +65,7 @@ font-weight:bold!important;
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-lg-10">
 								<form th:action="@{/addPromoVideo}"
 									method="post" enctype="multipart/form-data">
 									
@@ -69,21 +79,36 @@ font-weight:bold!important;
 									
 									
 								<div th:each="lanouter,iter: ${languages}" th:id="${'fileInputDiv' + iter.index}" th:style="${'display: ' + (iter.first ? 'block' : 'none')}" >
-									<div class="form-group" style="float:left; width:40%; ">
+								<div class="container">
+								<div class="row">	
+								<div class="col-md-4">	
+									<div class="form-group" >
                	                 		<label th:for="${'languageNameId' + iter.index}">Select Language </label>
 										<select th:id="${'languageNameId' + iter.index}" class="form-control" name="languageName">
 	  										<option value="0">Select ...</option>
 	  										<option th:each="lan : ${languages}" th:value="${lan.getLanId()}" th:text="${lan.getLangName()}"></option>
 										</select>
   									</div>
-
-<div class="form-group" style="float:left;  width:40%; margin-left:15px; margin-right:40px;">
+  									</div>
+<div class="col-md-4">	
+<div class="form-group" >
 	<label th:for="${'promoVideo' + iter.index}">PromoVideo*  </label>
 	<input type="file" class="form-control" th:id="${'promoVideo' + iter.index}" name="promoVideo"  accept=".mp4"/>
 	<small> (Only mp4 format of max filesize 1GB)</small> 
 	
 </div>
+</div>
 
+<div class="col-md-4">	
+<div class="form-group" >
+	<label th:for="${'thumbnail' + iter.index}">Thumbnail*  </label>
+	<input type="file" class="form-control" th:id="${'thumbnail' + iter.index}" name="thumbnail"  accept=".png, .jpg, .jpeg"/>
+	<small> (Only png, jpg or jpeg format of max file size 2 MB)</small> 
+	
+</div>
+</div>
+</div>
+</div>
 </div>
 									
 									<br>
@@ -125,8 +150,8 @@ font-weight:bold!important;
      <td> <span  th:text="${pro.findAlllangNames()}"> </span> </td>
 	   
       <td>
-     <div th:if="${pro.GetVideoFileofFirstLan() != 'null'}" style="width:300px;">
-												<video controls="controls" style="width: 100%;">
+     <div th:if="${pro.GetVideoFileofFirstLan() != 'null'}" style="width:400px;">
+												<video controls="controls" style="width: 100%;" th:poster="@{/files/}+@{${pro.GetThumbnailofFirstLan()}}">
 													<source th:src="@{/files/}+@{${pro.GetVideoFileofFirstLan()}}"
 														type="video/mp4" /> 	Your browser does not support HTML video. </video>
 											</div>
@@ -208,6 +233,101 @@ function setRequired(divid) {
 }
 
 addRow(divid);
+
+var isPlaying = [];
+				
+				var videos = document.querySelectorAll('video');
+				for(var i=0; i<videos.length; i++){
+				  	videos[i].addEventListener('play', function(){pauseAll(this)}, true);
+				}
+				
+				
+
+				function pauseAll(elem){
+					var videos2 = document.querySelectorAll('video');
+					for(var i=0; i<videos2.length; i++){
+				                if(videos2[i] == elem) continue;
+				                if(videos2[i].played.length > 0 && !videos2[i].paused){
+				                  videos2[i].pause();
+				                }
+				        }
+				  }
+				
+				
+				
+				
+				   // Functions to play the video with/without sound
+					function playMutedVideoMouseOver(event) {
+						var video = event.target;
+					 	var flag=0;
+					 	for (var j = 0; j < videos.length; j++){
+							 if(!videos[j].paused && !videos[j].muted)
+					 			flag=flag+1;
+						 }
+					 	if(flag==0){
+					 	video.play();
+					 	video.muted = true;
+						}
+					 
+					}
+				   
+
+					function playUnmutedVideoOnClick(event) {
+					 var video = event.target;
+					 video.muted = false;
+					 video.play();
+					}
+					
+					function pauseWithMutedVideoMouseOut(event) {
+						 var video = event.target;
+							if(video.muted){
+								video.pause();
+								//video.muted=!video.muted;
+							}
+						 
+						}
+						
+					
+				
+					 
+					
+					
+		
+		
+		
+		 var controls =
+[
+'play-large', // The large play button in the center
+// 'restart', // Restart playback
+// 'rewind', // Rewind by the seek time (default 10 seconds)
+'play', // Play/pause playback
+//'fast-forward', // Fast forward by the seek time (default 10 seconds)
+'progress', // The progress bar and scrubber for playback and buffering
+'current-time', // The current time of playback
+//'duration', // The full duration of the media
+'mute', // Toggle mute
+'volume', // Volume control
+'captions', // Toggle captions
+'settings', // Settings menu
+'pip', // Picture-in-picture (currently Safari only)
+'airplay', // Airplay (currently Safari only)
+'download', // Show a download button with a link to either the current source or a custom URL you specify in your options
+'fullscreen' // Toggle fullscreen
+];
+
+//const player = new Plyr('.vid1',{controls});
+
+//var videos = document.querySelectorAll('video');
+
+for(var i=0; i<videos.length; i++){
+	
+	const player = new Plyr(videos[i],{controls});	
+	
+	
+	   
+}
+		
+
 
 </script>
 </body>
