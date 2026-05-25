@@ -1641,7 +1641,11 @@ public class ServiceUtility {
     }
 
     public static String convertFilePathToUrl(String thumbnailFile) {
-        String result = thumbnailFile.replace("\\", "/");
+        String result = null;
+        if (thumbnailFile != null) {
+            result = thumbnailFile.replace("\\", "/");
+        }
+
         return result;
     }
 
