@@ -7975,6 +7975,95 @@ public class HomeController {
 
     /************************ Project Report End ********************************/
 
+    /**********************
+     * New Training Module Start
+     ******************************/
+
+    @GetMapping("/Training-Modules")
+    public String newHstTrainingModules(@RequestParam(name = "week_new", required = false, defaultValue = "0") int week,
+            @RequestParam(name = "lannew", required = false, defaultValue = "0") int lang, HttpServletRequest req,
+            @RequestParam(name = "page", defaultValue = "0") int page, Model model, Principal principal) {
+
+        User usr = getUser(principal);
+        logger.info("{} {} {}", usr.getUsername(), req.getMethod(), req.getRequestURI());
+        model.addAttribute("userInfo", usr);
+
+        model.addAttribute("week", week);
+        model.addAttribute("language", lang);
+        Week localWeek = null;
+        Language localLan = null;
+
+        Pageable pageable = PageRequest.of(page, 10);
+        String weekIdStr = String.valueOf(week);
+        String lanIdStr = String.valueOf(lang);
+
+        getPackageAndLanguageData(model, weekIdStr, lanIdStr);
+
+        if (week != 0) {
+            localWeek = weekService.findByWeekId(week);
+
+            model.addAttribute("weekforQuery", localWeek);
+        }
+        if (lang != 0) {
+            localLan = lanService.getById(lang);
+            model.addAttribute("lanforQuery", localLan);
+        }
+
+        List<WeekTitleVideo> weekTitleList = localWeek != null ? new ArrayList<>(localWeek.getWeekTitles())
+                : weekTitleVideoService.findAll();
+        List<PackageLanguage> packlan_list = localLan != null ? new ArrayList<>(localLan.getPackageLanguages())
+                : packLanService.findAll();
+
+        List<TutorialWithWeekAndPackage> tutorialswithWeekAndPackage = tutorialWithWeekAndPackageService
+                .findByWeekTitlesAndPackageLanguages(weekTitleList, packlan_list);
+
+        List<WeekTitleVideo> weekTitleVideoList = tutorialswithWeekAndPackage.stream()
+                .map(TutorialWithWeekAndPackage::getWeekTitle).distinct().collect(Collectors.toList());
+
+        List<WeekTitleVideo> finalWeekTitleVideoList = getEnglishTrainingMouduleFirst(weekTitleVideoList);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), finalWeekTitleVideoList.size());
+
+        List<WeekTitleVideo> sublist = finalWeekTitleVideoList.subList(start, end);
+
+        List<WeekTitleVideo> weekTitleVideoView = new ArrayList<WeekTitleVideo>();
+
+        Page<WeekTitleVideo> weekTitleVidePage = new PageImpl<>(sublist, pageable, finalWeekTitleVideoList.size());
+        for (WeekTitleVideo temp : weekTitleVidePage) {
+            {
+                weekTitleVideoView.add(temp);
+            }
+        }
+
+        int totalPages = 0;
+
+        if (weekTitleVidePage != null) {
+            totalPages = weekTitleVidePage.getTotalPages();
+        } else {
+            totalPages = 1;
+        }
+
+        int firstPage = page + 1 > 2 ? page + 1 - 2 : 1;
+        int lastPage = page + 1 < totalPages - 5 ? page + 1 + 5 : totalPages;
+
+        model.addAttribute("weekTitleVidePageList", weekTitleVidePage);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("firstPage", firstPage);
+        model.addAttribute("lastPage", lastPage);
+        model.addAttribute("totalPages", totalPages);
+
+        model.addAttribute("userInfo", usr);
+
+        // model.addAttribute("weekTitleVideoList", finalWeekTitleVideoList);
+
+        return "hstTrainingModuleList";
+
+    }
+
+    /********************* New Training Module End ********************************/
+
     @GetMapping("/trainingModules")
     public String hstTrainingModules(@RequestParam(name = "week", required = false, defaultValue = "") String weekName,
             @RequestParam(name = "lan", required = false, defaultValue = "") String langName, HttpServletRequest req,
