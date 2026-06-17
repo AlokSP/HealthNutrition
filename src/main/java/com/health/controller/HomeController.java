@@ -901,6 +901,33 @@ public class HomeController {
         getPackageAndLanguageData(model, "", "");
     }
 
+    private void getNewPackageAndLanguageData(Model model, int weekId, int lanId) {
+        List<PackageContainer> packageList = packLanService.findAllDistinctEnabledPackageContainers();
+        model.addAttribute("packageList", packageList);
+
+        ArrayList<Map<String, Integer>> arlist = ajaxController.getNewLanguageByWeek(weekId, lanId, null);
+        ArrayList<Map<String, Integer>> arlist1 = ajaxController.getNewWeekByLanguage(weekId, lanId, null);
+        Map<String, Integer> languages = arlist.get(0);
+        Map<String, Integer> weeks = arlist1.get(0);
+
+        model.addAttribute("weekListNew", weeks);
+        model.addAttribute("languagesNew", languages);
+        model.addAttribute("localWeekNew", weekId);
+
+        model.addAttribute("localLanguageNew", lanId);
+
+        model.addAttribute("languageCount", languages.size());
+
+        boolean downloadPackageFlag = !packageList.isEmpty();
+
+        model.addAttribute("downloadPackageFlag", downloadPackageFlag);
+
+    }
+
+    private void getNewPackageAndLanguageData(Model model) {
+        getNewPackageAndLanguageData(model, 0, 0);
+    }
+
     private void getModelTrainingResource(Model model, int topicId, int lanId, int fileTypeId) {
 
         ArrayList<Map<String, Integer>> arlist = ajaxController.getLanAndFileTypeByTopic(topicId, lanId, fileTypeId);
@@ -7980,8 +8007,8 @@ public class HomeController {
      ******************************/
 
     @GetMapping("/Training-Modules")
-    public String newHstTrainingModules(@RequestParam(name = "week_new", required = false, defaultValue = "0") int week,
-            @RequestParam(name = "lannew", required = false, defaultValue = "0") int lang, HttpServletRequest req,
+    public String newHstTrainingModules(@RequestParam(name = "week", required = false, defaultValue = "0") int week,
+            @RequestParam(name = "lang", required = false, defaultValue = "0") int lang, HttpServletRequest req,
             @RequestParam(name = "page", defaultValue = "0") int page, Model model, Principal principal) {
 
         User usr = getUser(principal);
@@ -7994,10 +8021,8 @@ public class HomeController {
         Language localLan = null;
 
         Pageable pageable = PageRequest.of(page, 10);
-        String weekIdStr = String.valueOf(week);
-        String lanIdStr = String.valueOf(lang);
 
-        getPackageAndLanguageData(model, weekIdStr, lanIdStr);
+        getNewPackageAndLanguageData(model, week, lang);
 
         if (week != 0) {
             localWeek = weekService.findByWeekId(week);
@@ -8047,7 +8072,7 @@ public class HomeController {
         int firstPage = page + 1 > 2 ? page + 1 - 2 : 1;
         int lastPage = page + 1 < totalPages - 5 ? page + 1 + 5 : totalPages;
 
-        model.addAttribute("weekTitleVidePageList", weekTitleVidePage);
+        model.addAttribute("weekTitleVideoView", weekTitleVideoView);
 
         model.addAttribute("currentPage", page);
         model.addAttribute("firstPage", firstPage);

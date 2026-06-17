@@ -136,6 +136,82 @@ function resetInput(id) {
         
 </section>
 </div>
+
+
+	<div th:fragment="new_search_bar">
+		<section id="new_search_bar-bar" class="container-lg my-5">
+<h1 class="text-center" style="color: #014F7A;font-size:1.8rem;">Mentor Content</h1>			
+<form th:action="@{/Training-Modules}" class="form-inline w-100 mt-4" name="selectOption" id="form_new" style="width:100%;" >
+
+<div class="row" style="width: 100%;">
+
+
+
+<div class="col-md-4 mb-3 input-group" style="width:100%;">
+<select class="custom-select d-block form-control" id="week_new" name="week">
+			 
+              
+              <option value="">Select Week</option>
+       			<option th:each="weekTemp : ${weekListNew}" 
+                th:selected="${weekTemp.value==localWeekNew}" 
+                th:value="${weekTemp.value}" 
+                th:text="${weekTemp.key}">
+       			 </option>
+            </select>
+             <div th:if="${localWeekNew != null and localWeekNew != 0}" 
+          class="input-group-btn" 
+          id="weekresetdivnew" 
+          style="padding-top: 4px;">
+        <button id="weekresetnew" style="background:none; border:none;">
+          <span style="font-size:20px;">&#10227;</span>
+        </button>
+     </div>
+</div>
+
+
+
+<div class="col-md-4 mb-3 input-group" style="width:100%;" >
+<select class="custom-select d-block form-control" id="lang_new" name="lang">
+			 
+              <option value="">Select Language</option>
+      <option th:each="lan : ${languagesNew}" 
+              th:selected="${lan.value==localLanguageNew}" 
+              th:value="${lan.value}" 
+              th:text="${lan.key}">
+      </option> 
+            </select>
+              <div th:if="${localLanguageNew != null and localLanguageNew != 0}" 
+         class="input-group-btn" 
+         id="languageresetdivnew" 
+         style="padding-top: 4px;">
+      <button id="languageresetnew" style="background:none; border:none;">
+        <span style="font-size:20px;">&#10227;</span>
+      </button>
+    </div>
+</div>
+ <div class="col-md-2  mb-3" style="width:100%;">
+    <button type="submit" class="btn btn-outline-info" id="submitBottonnew" style="height: 38px;width: 100%;margin:0;background:#1C7871;color:#fff;"> Submit </button>
+    </div>
+     <div class="col-md-2 mb-3" style="width: 100%;">
+          <input class="btn btn-outline-info" type="button" value="Clear" id="btnClearFormnew" style="height: 35px;width: 100%;margin:0; color:#fff; background:SlateBlue;" />
+           
+     </div>
+         
+</div>
+
+ 
+
+</form>
+
+
+ 
+
+
+
+
+          
+</section>
+	</div>
 	
 </body>
 </html>
