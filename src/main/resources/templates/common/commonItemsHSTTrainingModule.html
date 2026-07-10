@@ -139,8 +139,8 @@ function resetInput(id) {
 
 
 	<div th:fragment="new_search_bar">
-		<section id="new_search_bar-bar" class="container-lg my-5">
-<h1 class="text-center" style="color: #014F7A;font-size:1.8rem;">Mentor Content</h1>			
+		<section id="new_search_bar-bar" class="container-lg mt-3 pt-1 mb-2">
+<h1 class="text-center mt-3 mb-3" style="color: #014F7A;font-size:1.8rem;">Mentor Content</h1>			
 <form th:action="@{/Training-Modules}" class="form-inline w-100 mt-4" name="selectOption" id="form_new" style="width:100%;" >
 
 <div class="row" style="width: 100%;">
@@ -161,7 +161,7 @@ function resetInput(id) {
              <div th:if="${localWeekNew != null and localWeekNew != 0}" 
           class="input-group-btn" 
           id="weekresetdivnew" 
-          style="padding-top: 4px;">
+          style="display:none; padding-top: 4px;">
         <button id="weekresetnew" style="background:none; border:none;">
           <span style="font-size:20px;">&#10227;</span>
         </button>
@@ -183,7 +183,7 @@ function resetInput(id) {
               <div th:if="${localLanguageNew != null and localLanguageNew != 0}" 
          class="input-group-btn" 
          id="languageresetdivnew" 
-         style="padding-top: 4px;">
+         style="display:none; padding-top: 4px;">
       <button id="languageresetnew" style="background:none; border:none;">
         <span style="font-size:20px;">&#10227;</span>
       </button>

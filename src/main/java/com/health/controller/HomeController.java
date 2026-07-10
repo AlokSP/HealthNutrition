@@ -8146,6 +8146,14 @@ public class HomeController {
         } else {
             Week week = weekTitleVideo.getWeek();
             Language lan = weekTitleVideo.getVideoResource().getLan();
+            model.addAttribute("week", week.getWeekId());
+            model.addAttribute("language", lan.getLanId());
+
+            getNewPackageAndLanguageData(model, week.getWeekId(), lan.getLanId());
+
+            model.addAttribute("weekforQuery", week);
+
+            model.addAttribute("lanforQuery", lan);
 
             List<WeekTitleVideo> relatedweekTitleVideoList = weekTitleVideoService.findByWeekAndLan(week, lan);
             relatedweekTitleVideoList.remove(weekTitleVideo);
