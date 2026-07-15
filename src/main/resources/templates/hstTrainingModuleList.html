@@ -6,6 +6,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 </head>
 <body>
  <script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
  
   <section th:replace="index.html :: header-bar"></section>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
@@ -112,6 +113,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 	
 </main>
 
+
 </div>
 
 
@@ -132,6 +134,49 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 	
 		
 <div th:replace="common/trail :: body-bottom-scripts"></div>
+  <br><br>
+	 
+	  <footer class="footer" style="margin-bottom:0px;">
+	  <div class="container" >
+	  
+	  <div class="row"  height="50%" >
+	   <div class="col text-center justify-content" style=" padding-top:12px; height:50%;"> <p> <i class="fas fa-map-marker-alt contact-icon" ></i> Spoken Tutorial Project,<br>
+			TCS Lab,Behind CAD Centre,<br>
+			IIT Bombay, Powai,<br>
+			Mumbai - 400076
+   			</p> 
+   	 </div>
+	  
+	  <div class="col text-center" style=" padding-top:12px; height:50%;"> 
+	
+	  		<p><a href="mailto:health@spoken-tutorial.org"><i class="fas fa-envelope contact-icon mr-2"></i><span style="color:white;"> health@spoken-tutorial.org</span> </a></p>
+		    <p><a href="tel:02225764229"><i class="fas fa-phone-alt contact-icon mr-2"></i><span style="color:white;">022 2576 4229 </span> </a></p>
+	  
+	   </div>
+	   
+	  <div class="col  text-center " style="padding-top:10px; height:50%;">
+		  <a href="https://www.iitb.ac.in/" target="_blank"> <img th:src="@{/image/iitb-logo.png}" width="50%" height="50%"  alt="IITB" > </img>	
+    	  <p class="text-centre"><span  style="color:white;">Developed at IIT-Bombay</span></p></a>
+	  
+	  </div>
+	  
+	  <div class="col   justify-content " style="padding-top:5px; height:30%; ">
+		   	
+		    <p><a href="https://www.youtube.com/channel/UCmyV3lKT1Gs1AfgtV8pp__Q" class="fab fa-youtube fa-1x" style="color: #ed302f;"  target="_blank"> <span  style="color:white; font-size: 14px;">ST Health YouTube Channel</span></a></p>
+		    <p><a href="https://www.youtube.com/user/SpokenTutorialIITB" class="fab fa-youtube fa-1x" style="color: #ed302f;" target="_blank"> <span  style="color: white; font-size: 14px;">ST YouTube Channel</span>  </a> </p>
+		    <p><a href="https://www.facebook.com/SpokenTutorial.org" class="fab fa-facebook-f fa-1x" style="color: #3b5998;" target="_blank"> <span  style="color: white; font-size: 14px;"> ST Facebook Page</span> </a></p>
+    		<p><a href="https://www.linkedin.com/company/spokentutorial?original_referer=" class="fab fa-linkedin-in fa-1x" style="color: #0082ca;" target="_blank">  <span  style="color:white; font-size: 14px;">ST LinkedIn Page</span> </a>  </p>
+    		
+    		
+   			
+	  </div>
+	 
+	  </div>
+	  
+	  </div>
+	
+    </footer>
+ 
 
 <style>
 	
@@ -357,10 +402,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
   
 </style>
 
-
 <script>
-		var projectPath='[(@{/})]';
-		
+	var projectPath='[(@{/})]';
+
+</script>
+<!--script>
+				
 		
   		
 		 
@@ -502,6 +549,6 @@ var isPlaying = [];
 			
 			   
 		}
-</script>
+</script-->
 </body>
 </html>

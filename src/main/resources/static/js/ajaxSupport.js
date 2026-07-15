@@ -2865,7 +2865,7 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 						
 						console.log(result);
 						var html = '';
-						html += '<option value="">Select Language</option>';
+						html += '<option value="0">Select Language</option>';
 						$.each(result , function( value ,key ) {
 							var selected=(languageId==key)?"selected":"";
 			  	  			        html += `<option value="${key}" ${selected}> ${value} </option>`;
@@ -2874,7 +2874,7 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 						$('#lang_new').html(html);
 						
 						
-						if (weekId !== "") {
+						if (weekId !=0) {
 							$("#weekresetdivnew").show();
 						} else {
 						$("#weekresetdivnew").hide();
@@ -2899,8 +2899,8 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 			
 			 $( "#weekresetnew" ).click(function() {
 			
-				var weekId = "";
-				$("#week_new").val("");
+				var weekId = 0;
+				$("#week_new").val("0");
 				var languageId = $("#lang_new").val();
 				
 				loadLanguageByWeek(weekId, languageId);
@@ -2928,7 +2928,7 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 						
 						console.log(result);
 						var html = '';
-						html += '<option value="">Select Week</option>';
+						html += '<option value="0">Select Week</option>';
 						$.each(result , function( value ,key ) {
 							var selected=(weekId==key)?"selected":"";
 			  	  			        html += `<option value="${key}" ${selected}> ${value} </option>`;
@@ -2937,7 +2937,7 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 						$('#week_new').html(html);
 						
 						
-						if (languageId !== "") {
+						if (languageId !=0) {
 							$("#languageresetdivnew").show();
 						} else {
 						$("#languageresetdivnew").hide();
@@ -2962,8 +2962,8 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 			
 			 $( "#languageresetnew" ).click(function() {
 			
-				var languageId = "";
-				$("#lang_new").val("");
+				var languageId = 0;
+				$("#lang_new").val("0");
 				var weekId = $("#week_new").val();
 				
 				loadWeekByLanguage(weekId, languageId);
@@ -2980,10 +2980,10 @@ $(".deleteTrainingModuleTutorial-btn").click(function(){
 			$( "#btnClearFormnew" ).click(function() {
 				
 				
-				var languageId = "";
-				$("#lang_new").val("");
-				var weekId =""; 
-				$("#week_new").val("");
+				var languageId = 0;
+				$("#lang_new").val("0");
+				var weekId =0; 
+				$("#week_new").val("0");
 				
 				loadLanguageByWeek(weekId, languageId);
 				loadWeekByLanguage(weekId, languageId);
@@ -4227,8 +4227,7 @@ $(document).ready(function () {
 		                
 		            }
 		            
-		            console.log("Search bar div found?", $('#searchbarDivofTutorialContainer').length);
-					console.log("Autoplay checkbox state:", $('#autoPlayCheckbox').is(':checked'));
+		            
 		        }
 		    });
 			
