@@ -1267,14 +1267,19 @@ public class AjaxController {
 
     @GetMapping("/downloadManager")
     public String downloadManager(@RequestParam(name = "zipUrl") String zipUrl, HttpServletResponse response,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, HttpServletRequest req) {
 
         String message = ServiceUtility.downloadManager(zipUrl, downloadCount, downloadLimit, downloadTimeOut, env,
                 response);
 
         if (message != null) {
+            String referer = req.getHeader("Referer");
+            if (referer == null || referer.trim().isEmpty()) {
+                referer = "/Training-Modules";
+            }
+
             redirectAttributes.addFlashAttribute("return_msg", message);
-            return "redirect:/trainingModules";
+            return "redirect:" + referer;
         }
 
         return null;

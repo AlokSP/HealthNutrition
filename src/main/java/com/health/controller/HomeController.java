@@ -8144,6 +8144,7 @@ public class HomeController {
         if (weekTitleVideo == null) {
             foundVideo = false;
         } else {
+            model.addAttribute("currentwtvId", weekTitleVideoId);
             Week week = weekTitleVideo.getWeek();
             Language lan = weekTitleVideo.getVideoResource().getLan();
             model.addAttribute("week", week.getWeekId());
